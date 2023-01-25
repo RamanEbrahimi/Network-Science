@@ -181,17 +181,27 @@
 \paragraph{}To begin with, after reading data from the local cloud in Google Colaboratory, we had three functions defined to simplify the computation process. The first of three serves the purpose of computing centrality measures using predefined functions in NetworkX; the other two are for plotting and visualizing for better analysis; the first provides a heat map for each centrality measure, and the second one plots a histogram for each centrality measure.
 
 \begin{lstlisting}[language=python, caption={Functions for future computations}, label={lst:Pycode}]
+from networkx.classes.function import is_directed
 def centrality_measures(g):
     d_cent = nx.degree_centrality(g) # this is normalized by default
     c_cent = nx.closeness_centrality(g) # this is normalized by default
     b_cent = nx.betweenness_centrality(g)
     e_cent = nx.eigenvector_centrality(g)
+    h_cent = nx.harmonic_centrality(g)
     pr = nx.pagerank(g) # alpha is 0.85 by default, we can change it.
     clus_coeff = nx.clustering(g)
     # these are all dictionaries from nodes to their centrality value (or other variables).
-    return d_cent, c_cent, b_cent, e_cent, pr, clus_coeff
+    if nx.is_directed(g):
+      in_cent = nx.in_degree_centrality(g)
+      out_cent = nx.out_degree_centrality(g)
+    else:
+      in_cent = 0
+      out_cent = 0
+      
+    return d_cent, c_cent, b_cent, e_cent, h_cent, pr, clus_coeff, in_cent, out_cent
 
 def draw(G, pos, measures, measure_name):
+    
     nodes = nx.draw_networkx_nodes(G, pos, node_size=2, cmap=plt.cm.plasma, 
                                    node_color=list(measures.values()),
                                    nodelist=measures.keys())
@@ -201,6 +211,7 @@ def draw(G, pos, measures, measure_name):
     plt.title(measure_name)
     plt.colorbar(nodes)
     plt.axis('off')
+    plt.savefig(measure_name+'.png', format='png')
     plt.show()
 
 
@@ -208,6 +219,7 @@ def plot_hist(measure, measure_name):
     plt.hist(list(measure.values()))
     plt.title(measure_name)
     # plt.axis('off')
+    plt.savefig(measure_name+'hist.png', format='png')
     plt.show()\end{lstlisting}
 \newpage
 \subsection*{Dataset 1: General Relativity and Quantum Cosmology collaboration network}
@@ -339,27 +351,49 @@ radius\; :\;\; 4 \\
 diameter\;:\;\; 8
 \end{split}
 \end{equation}
-Which means the largest shortest path in our graph is 8 and we can get to any node at most in 8 steps. Moreover, using figureZ\ref{fig:fb} we can see that our networks has communities. Here we don't see much difference in the histograms but we do have communities and clusters in the network. The reason this is not showing up in the clustering coefficient histogram is that these communities have almost similar clustering coefficients which the will shape a similar histogram to other datasets.
+Which means the largest shortest path in our graph is 8 and we can get to any node at most in 8 steps. Moreover, using figure~\ref{fig:fb} we can see that our networks has communities. Here we don't see much difference in the histograms but we do have communities and clusters in the network. The reason this is not showing up in the clustering coefficient histogram is that these communities have almost similar clustering coefficients which the will shape a similar histogram to other datasets.
 \begin{figure}[h]
-\includegraphics[width=0.5\textwidth]{GrQc_pr.png}
-\includegraphics[width=0.5\textwidth]{GrQc_pr_hist.png}
+\includegraphics[width=0.5\textwidth]{fb_clustering.png}
+\includegraphics[width=0.5\textwidth]{fb_clustering_hist.png}
 \captionsetup{justification=centering,margin=0.5cm}
-\caption{Heatmap for PageRank and an approximate network visualization (on the left). Histogram of PageRank of the nodes (on the right).}
-\label{fig:pr}
+\caption{Heatmap for clustering coefficient and an approximate network visualization (on the left). Histogram of clustering coefficient of the nodes (on the right).}
+\label{fig:fb}
 \end{figure}
+Also, we tried to find and visualise communities in the graph using Girvan-Newman algorithm but the computational cost of this algorithm is massive! Therefore, we decided to skip this step.
 
 
 
 
 
 
+% --- Bibliography ---
 
+% Start a bibliography with two items, a book and a webpage.
+% To include a citation, use "\cite{book1}".
 
+\begin{thebibliography}{2}
 
+\bibitem{Networks, Crowds, and Markets: Reasoning about a Highly Connected World}
+  Easley, David; Kleinberg Jon.
+  \textit{Networks, Crowds, and Markets: Reasoning about a Highly Connected World}.
+  Cambridge University Press, 2010.
+  Print.
 
+\bibitem{webpage1}
+  ``Stanford Network Analysis Project''.
+  SNAP, Stanford.
+  Online. 
+  \texttt{http://snap.stanford.edu/index.html}
+  
+  
+\bibitem{webpage1}
+  ``Network Analysis in Python''.
+  NetworkX.
+  Online. 
+  \texttt{https://networkx.org/documentation/stable/reference/introduction.html}
 
+\end{thebibliography}
 
-
-
+% --- Document ends here ---
 
 \end{document}

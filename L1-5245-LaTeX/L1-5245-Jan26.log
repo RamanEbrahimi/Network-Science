@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.5.19)  25 JAN 2023 15:56
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.5.19)  25 JAN 2023 16:36
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -501,7 +501,11 @@ File: l3backend-pdfmode.def 2020-03-12 L3 backend support: PDF mode
 \l__kernel_color_stack_int=\count295
 \l__pdf_internal_box=\box54
 )
-(./L1-5245-Jan26.aux)
+(./L1-5245-Jan26.aux
+
+LaTeX Warning: Label `webpage1' multiply defined.
+
+)
 \openout1 = `L1-5245-Jan26.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 178.
@@ -520,8 +524,7 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 178.
 LaTeX Font Info:    ... okay on input line 178.
 LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 178.
 LaTeX Font Info:    ... okay on input line 178.
-
-(/usr/local/texlive/2020/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+ (/usr/local/texlive/2020/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count296
 \scratchdimen=\dimen184
@@ -654,129 +657,165 @@ This may cause the page layout to be inconsistent, however.
 [1{/usr/local/texlive/2020/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 ]
-<GrQc_d_cent.png, id=47, 342.27875pt x 247.92625pt>
+[2]
+<GrQc_d_cent.png, id=63, 342.27875pt x 247.92625pt>
 File: GrQc_d_cent.png Graphic file (type png)
 <use GrQc_d_cent.png>
-Package pdftex.def Info: GrQc_d_cent.png  used on input line 218.
+Package pdftex.def Info: GrQc_d_cent.png  used on input line 230.
 (pdftex.def)             Requested size: 209.58257pt x 151.8136pt.
-<GrQc_d_cent_hist.png, id=49, 392.46625pt x 264.99pt>
+<GrQc_d_cent_hist.png, id=65, 392.46625pt x 264.99pt>
 File: GrQc_d_cent_hist.png Graphic file (type png)
 <use GrQc_d_cent_hist.png>
-Package pdftex.def Info: GrQc_d_cent_hist.png  used on input line 219.
+Package pdftex.def Info: GrQc_d_cent_hist.png  used on input line 231.
 (pdftex.def)             Requested size: 209.58257pt x 141.51149pt.
 
-Overfull \hbox (2.43332pt too wide) in paragraph at lines 218--221
+Overfull \hbox (2.43332pt too wide) in paragraph at lines 230--233
 [][] [] 
  []
 
-<GrQc_c_cent.png, id=50, 342.27875pt x 254.9525pt>
+<GrQc_c_cent.png, id=66, 342.27875pt x 254.9525pt>
 File: GrQc_c_cent.png Graphic file (type png)
 <use GrQc_c_cent.png>
-Package pdftex.def Info: GrQc_c_cent.png  used on input line 227.
+Package pdftex.def Info: GrQc_c_cent.png  used on input line 239.
 (pdftex.def)             Requested size: 209.58257pt x 156.116pt.
-<GrQc_c_cent_hist.png, id=51, 390.45876pt x 264.99pt>
+<GrQc_c_cent_hist.png, id=67, 390.45876pt x 264.99pt>
 File: GrQc_c_cent_hist.png Graphic file (type png)
 <use GrQc_c_cent_hist.png>
-Package pdftex.def Info: GrQc_c_cent_hist.png  used on input line 228.
+Package pdftex.def Info: GrQc_c_cent_hist.png  used on input line 240.
 (pdftex.def)             Requested size: 209.58257pt x 142.23526pt.
 
-Overfull \hbox (2.43332pt too wide) in paragraph at lines 227--230
+Overfull \hbox (2.43332pt too wide) in paragraph at lines 239--242
 [][] [] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<GrQc_b_cent.png, id=54, 360.34625pt x 254.9525pt>
+<GrQc_b_cent.png, id=70, 360.34625pt x 254.9525pt>
 File: GrQc_b_cent.png Graphic file (type png)
 <use GrQc_b_cent.png>
-Package pdftex.def Info: GrQc_b_cent.png  used on input line 237.
+Package pdftex.def Info: GrQc_b_cent.png  used on input line 249.
 (pdftex.def)             Requested size: 209.58257pt x 148.28102pt.
-<GrQc_b_cent_hist.png, id=55, 382.42876pt x 264.99pt>
+<GrQc_b_cent_hist.png, id=71, 382.42876pt x 264.99pt>
 File: GrQc_b_cent_hist.png Graphic file (type png)
 <use GrQc_b_cent_hist.png>
-Package pdftex.def Info: GrQc_b_cent_hist.png  used on input line 238.
+Package pdftex.def Info: GrQc_b_cent_hist.png  used on input line 250.
 (pdftex.def)             Requested size: 209.58257pt x 145.22334pt.
 
-Overfull \hbox (2.43332pt too wide) in paragraph at lines 237--240
+Overfull \hbox (2.43332pt too wide) in paragraph at lines 249--252
 [][] [] 
  []
 
-[2 <./GrQc_d_cent.png> <./GrQc_d_cent_hist.png>]
-<GrQc_e_cent.png, id=71, 342.27875pt x 254.9525pt>
+[3 <./GrQc_d_cent.png> <./GrQc_d_cent_hist.png>]
+<GrQc_e_cent.png, id=87, 342.27875pt x 254.9525pt>
 File: GrQc_e_cent.png Graphic file (type png)
 <use GrQc_e_cent.png>
-Package pdftex.def Info: GrQc_e_cent.png  used on input line 246.
+Package pdftex.def Info: GrQc_e_cent.png  used on input line 258.
 (pdftex.def)             Requested size: 209.58257pt x 156.116pt.
-<GrQc_e_cent_hist.png, id=72, 386.44376pt x 264.99pt>
+<GrQc_e_cent_hist.png, id=88, 386.44376pt x 264.99pt>
 File: GrQc_e_cent_hist.png Graphic file (type png)
 <use GrQc_e_cent_hist.png>
-Package pdftex.def Info: GrQc_e_cent_hist.png  used on input line 247.
+Package pdftex.def Info: GrQc_e_cent_hist.png  used on input line 259.
 (pdftex.def)             Requested size: 209.58257pt x 143.71515pt.
 
-Overfull \hbox (2.43332pt too wide) in paragraph at lines 246--249
+Overfull \hbox (2.43332pt too wide) in paragraph at lines 258--261
 [][] [] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<GrQc_pr.png, id=73, 389.455pt x 255.95625pt>
+<GrQc_pr.png, id=89, 389.455pt x 255.95625pt>
 File: GrQc_pr.png Graphic file (type png)
 <use GrQc_pr.png>
-Package pdftex.def Info: GrQc_pr.png  used on input line 254.
+Package pdftex.def Info: GrQc_pr.png  used on input line 266.
 (pdftex.def)             Requested size: 209.58257pt x 137.73782pt.
-<GrQc_pr_hist.png, id=74, 382.42876pt x 264.99pt>
+<GrQc_pr_hist.png, id=90, 382.42876pt x 264.99pt>
 File: GrQc_pr_hist.png Graphic file (type png)
 <use GrQc_pr_hist.png>
-Package pdftex.def Info: GrQc_pr_hist.png  used on input line 255.
+Package pdftex.def Info: GrQc_pr_hist.png  used on input line 267.
 (pdftex.def)             Requested size: 209.58257pt x 145.22334pt.
 
-Overfull \hbox (2.43332pt too wide) in paragraph at lines 254--257
+Overfull \hbox (2.43332pt too wide) in paragraph at lines 266--269
 [][] [] 
  []
 
-[3 <./GrQc_c_cent.png> <./GrQc_c_cent_hist.png> <./GrQc_b_cent.png> <./GrQc_b_c
+[4 <./GrQc_c_cent.png> <./GrQc_c_cent_hist.png> <./GrQc_b_cent.png> <./GrQc_b_c
 ent_hist.png>]
-<GrQc_clustering.png, id=88, 342.27875pt x 254.9525pt>
+<GrQc_clustering.png, id=104, 342.27875pt x 254.9525pt>
 File: GrQc_clustering.png Graphic file (type png)
 <use GrQc_clustering.png>
-Package pdftex.def Info: GrQc_clustering.png  used on input line 263.
+Package pdftex.def Info: GrQc_clustering.png  used on input line 275.
 (pdftex.def)             Requested size: 209.58257pt x 156.116pt.
-<GrQc_clustering_hist.png, id=89, 382.42876pt x 264.99pt>
+<GrQc_clustering_hist.png, id=105, 382.42876pt x 264.99pt>
 File: GrQc_clustering_hist.png Graphic file (type png)
 <use GrQc_clustering_hist.png>
-Package pdftex.def Info: GrQc_clustering_hist.png  used on input line 264.
+Package pdftex.def Info: GrQc_clustering_hist.png  used on input line 276.
 (pdftex.def)             Requested size: 209.58257pt x 145.22334pt.
 
-Overfull \hbox (2.43332pt too wide) in paragraph at lines 263--266
+Overfull \hbox (2.43332pt too wide) in paragraph at lines 275--278
 [][] [] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[4 <./GrQc_e_cent.png> <./GrQc_e_cent_hist.png> <./GrQc_pr.png> <./GrQc_pr_hist
-.png>] [5 <./GrQc_clustering.png> <./GrQc_clustering_hist.png>] [6] [7]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 359.
+[5 <./GrQc_e_cent.png> <./GrQc_e_cent_hist.png> <./GrQc_pr.png> <./GrQc_pr_hist
+.png>] [6 <./GrQc_clustering.png> <./GrQc_clustering_hist.png>] [7] [8]
+<fb_clustering.png, id=152, 433.62pt x 289.08pt>
+File: fb_clustering.png Graphic file (type png)
+<use fb_clustering.png>
+Package pdftex.def Info: fb_clustering.png  used on input line 356.
+(pdftex.def)             Requested size: 209.58257pt x 139.72282pt.
+<fb_clustering_hist.png, id=153, 433.62pt x 289.08pt>
+File: fb_clustering_hist.png Graphic file (type png)
+<use fb_clustering_hist.png>
+Package pdftex.def Info: fb_clustering_hist.png  used on input line 357.
+(pdftex.def)             Requested size: 209.58257pt x 139.72282pt.
 
-[8]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 359.
+Overfull \hbox (2.43332pt too wide) in paragraph at lines 356--359
+[][] [] 
+ []
+
+[9 <./fb_clustering.png> <./fb_clustering_hist.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 383--387
+[]\OT1/cmr/m/n/10.95 ``Stanford Net-work Anal-y-sis Project''. SNAP, Stan-ford.
+ On-line.
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 390--394
+[]\OT1/cmr/m/n/10.95 ``Network Anal-y-sis in Python''. Net-workX. On-line.
+ []
+
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 399.
+[10pdfTeX warning (ext4): destination with the same identifier (name{cite.webpa
+ge1}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.399 \end{document}
+                    ]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 399.
  (./L1-5245-Jan26.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 359.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 359.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 399.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 399.
 Package rerunfilecheck Info: File `L1-5245-Jan26.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 359.
+
+
+LaTeX Warning: There were multiply-defined labels.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 399.
  ) 
 Here is how much of TeX's memory you used:
- 12231 strings out of 480608
- 183044 string characters out of 5903630
- 765388 words of memory out of 5000000
- 27806 multiletter control sequences out of 15000+600000
- 540497 words of font info for 56 fonts, out of 8000000 for 9000
+ 12279 strings out of 480608
+ 183966 string characters out of 5903630
+ 800737 words of memory out of 5000000
+ 27833 multiletter control sequences out of 15000+600000
+ 541448 words of font info for 59 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 50i,14n,80p,734b,1648s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 50i,14n,80p,734b,2104s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2020/texmf-dist/fonts/enc/dvips/inconsolata/i4-ot1-0.enc}
 </usr/local/texlive/2020/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-
 zi4r.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmb
@@ -785,11 +824,12 @@ x10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx
 0.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.
 pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pf
 b></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb><
-/usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb>
-Output written on L1-5245-Jan26.pdf (8 pages, 312078 bytes).
+/usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></u
+sr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
+Output written on L1-5245-Jan26.pdf (10 pages, 372360 bytes).
 PDF statistics:
- 189 PDF objects out of 1000 (max. 8388607)
- 145 compressed objects within 2 object streams
- 75 named destinations out of 1000 (max. 500000)
- 61 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 225 PDF objects out of 1000 (max. 8388607)
+ 174 compressed objects within 2 object streams
+ 93 named destinations out of 1000 (max. 500000)
+ 71 words of extra memory for PDF output out of 10000 (max. 10000000)
 
