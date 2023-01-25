@@ -331,10 +331,22 @@ These results don't agree with the information given on the SNAP website which m
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------
 \subsection*{Dataset 4: Social circles: Facebook}
-
-
-
-
+\paragraph{Analysis using metrics and figures}For this part, we have a connected, undirected graph with 1,612,010 triangles. Since we have 4039 nodes in the network, most possible number of triangles are 10,973,563,139 which means we have a reasonable amount of triangles. Also, we can see that graph has bridges and we have extracted them in a dictionary since these bridges can be important. It's worth mentioning that we had bridges in previous networks too, but since they were representing nodes which were connected only to each other, they weren't as important, or in the same way important, as bridges for this part are.
+\paragraph{}We also computed diameter and radius of networks:
+\begin{equation}
+\begin{split} 
+radius\; :\;\; 4 \\
+diameter\;:\;\; 8
+\end{split}
+\end{equation}
+Which means the largest shortest path in our graph is 8 and we can get to any node at most in 8 steps. Moreover, using figureZ\ref{fig:fb} we can see that our networks has communities. Here we don't see much difference in the histograms but we do have communities and clusters in the network. The reason this is not showing up in the clustering coefficient histogram is that these communities have almost similar clustering coefficients which the will shape a similar histogram to other datasets.
+\begin{figure}[h]
+\includegraphics[width=0.5\textwidth]{GrQc_pr.png}
+\includegraphics[width=0.5\textwidth]{GrQc_pr_hist.png}
+\captionsetup{justification=centering,margin=0.5cm}
+\caption{Heatmap for PageRank and an approximate network visualization (on the left). Histogram of PageRank of the nodes (on the right).}
+\label{fig:pr}
+\end{figure}
 
 
 
