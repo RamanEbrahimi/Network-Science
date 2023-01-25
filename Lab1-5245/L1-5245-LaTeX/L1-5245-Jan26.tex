@@ -269,6 +269,7 @@ On the histogram of PageRank, non-similar to betweenness and eigenvector central
 Also, since there are not many connections on the ring, we can say that there are high clustering coefficients because some packs of fully connected nodes, such as two or three nodes connected, make their clustering coefficient equal to one. 
 \paragraph{Further measurements}There were some other measures computed, which are visible in the code, that are worth mentioning. We had 48,260 triangles, and with 5242 nodes, the total possible triangles were 23,993,367,880, meaning very few triangles were formed in the network. Moreover, there were bridges in the network (obviously), and the largest connected component was visualized in the middle of every figure up until now. \\
 We had 4158 nodes in the largest connected component, which is close to \%80 of the nodes, and we had 13428 edges in the largest connected component, which is around \%92 of the total edges of the network. This means the nodes outside the largest connected component are barely connected, as we mentioned before.
+\paragraph{NOTE}From the next section on, we will only talk about more general measurements of networks in hand; however, we will still include visualizations in a folder named "Figures," and we will briefly talk about them.
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -278,10 +279,58 @@ We had 4158 nodes in the largest connected component, which is close to \%80 of 
 %--------------------------------------------------------------------------------------------------------------------------------------------------------------
 \subsection*{Dataset 2: Wikipedia vote network}
 \paragraph{}This section's network is a directed network where a directed edge from node i to node j represents that user i voted on user j.
-
-
-
-
+\paragraph{}Since visualization of the graph for this part takes a long time, I decided to skip that step and only use the metric and measurements plus histograms without knowing how the network looks. This situation can happen for many real-life networks since our datasets are getting bigger and bigger, and we will have to understand the structure and behavior of networks with minimum computation cost.
+\paragraph{Analysis using metrics}We know we have a directed graph and by trying to compute normal diameter we know our network is disconnected since we get the error "Found infinite path length because the digraph is not strongly connected." We used a new way of computing diameter which ignored infinity values.
+\begin{equation}
+diameter:\;\; 10
+\end{equation}
+Moreover, we computed both largest weakly and strongly components, and computed the fraction of nodes and edges in thes components:
+\begin{equation}
+\begin{split} 
+nodes\; in\; the\; largest\; weakly\; connected\; component:\;\; 0.9931131412508785 \\
+edges\; in\; the\; largest\; weakly\; connected\; component:\;\; 0.9997492501615408 \\
+nodes\; in\; the\; largest\; strongly\; connected\; component:\;\; 0.18271257905832747 \\
+edges\; in\; the\; largest\; strongly\; connected\; component:\;\; 0.3805225240864508 \\
+\end{split}
+\end{equation}
+These numbers tell us that almost every node is in the largest weakly connected component which consists almost every edge in our network. Therefore there are few nodes that are connected to each other outside this component that makes this graph disconnected. On the other hand, we have a relatively small largest strongly connected component which means most of the nodes in our weakly sonnected component are on the edge of our network.
+\paragraph{Analysis using histograms}We can also get some insights from seeing the distribution of centralities and histograms. Looking at histograms, we see some similarities with out first dataset. In the histograms we can see similar shapes in closeness and harmonic centralities, as expected, and also we see very low betweenness centrality for all nodes which means all of our nodes are similarly not on many shortest paths. There are some high clustering coefficients which are for mentioned disconnected nodes, and lastly, we have low PageRank for all the nodes which means we don't have nodes with many incoming links and we can confirm this by looking at in-degree centrality histogram.
+%--------------------------------------------------------------------------------------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------------------------------------------------------------------------------------
+\newpage
+%--------------------------------------------------------------------------------------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------------------------------------------------------------------------------------
+\subsection*{Dataset 3: Gnutella peer-to-peer network, August 8 2002}
+\paragraph{}For this part we got both histograms and shape of our network plus heatmap, same as first dataset, but we mostly talk about general metrics and briefly mention what we can get from histograms and heatmap, such as similarities and differences.
+\paragraph{Analysis using metrics}Same as last section, we have a directed network, and we computed same measures as last section.
+\begin{equation}
+\begin{split} 
+nodes\; in\; the\; largest\; weakly\; connected\; component:\;\; 0.999682590065069 \\
+edges\; in\; the\; largest\; weakly\; connected\; component:\;\; 0.9999518698560909 \\
+nodes\; in\; the\; largest\; strongly\; connected\; component:\;\; 0.3282018727186161 \\
+edges\; in\; the\; largest\; strongly\; connected\; component:\;\; 0.4482360302257304 \\
+\end{split}
+\end{equation}
+Looking at these fractions and comparing them to WikiVote dataset, we can say this network has both larger strongly and weakly connected components. They both contain higher percentage of nodes and edges. But still, very few nodes are making our network disconnected, and the difference in strongly and weakly connected components tell us that many nodes are still on the edge of graph but graph is more connected in comparison with WikiVote network.
+\paragraph{}Some other measures were calculated for strongly connected component which are worth mentioning:
+\begin{equation}
+\begin{split} 
+radius\; of\; largest\; strongly\; connected\; component\; is:\;\; 12 \\
+diameter\; of\; largest\; strongly\; connected\; component\; is:\;\; 19
+\end{split}
+\end{equation}
+These results don't agree with the information given on the SNAP website which might be because of how the diameter and radius are calculated within directed graphs.
+\paragraph{Analysis using histograms}The most interesting histogram for this section is the closeness centrality histogram. For this network, most of the nodes have non-zero closeness centrality which means the average shortest path from a node to every other node follows an almost normal distribution.
+%--------------------------------------------------------------------------------------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------------------------------------------------------------------------------------
+\newpage
+%--------------------------------------------------------------------------------------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------------------------------------------------------------------------------------
+\subsection*{Dataset 4: Social circles: Facebook}
 
 
 
