@@ -1,0 +1,25 @@
+Input graph information ---------------------------------------------------
+  Name: /Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/wiki-Vote.metis, #Vertices: 7115, #Edges: 104319
+Output shall be placed in the file /Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/wiki-Vote.metis.c500.i2.0.b0.5
+------------------------------------------------
+Clustering....
+Coarsened 7 levels
+Number of vertices in coarsest graph:491
+Done level 7
+Done level 6
+Done level 5
+Done level 4
+Done level 3
+Done level 2
+Done level 1
+Done level 0
+------------------------------------------------
+Clusters: 161 N-Cut: 124.316 AvgN-Cut: 0.772 Balance in cluster sizes: 55.98 Std.Deviation in cluster sizes: 262.90 Coefficient_of_Variation: 5.95
+
+Output is written to file: /Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/wiki-Vote.metis.c500.i2.0.b0.5
+
+Timing Information --------------------------------------------------
+  I/O:          		   0.009
+  Partitioning: 		   0.673   (MLR-MCL time)
+  Total:        		   0.682
+**********************************************************************
