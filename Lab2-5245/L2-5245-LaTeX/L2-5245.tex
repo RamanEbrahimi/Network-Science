@@ -168,7 +168,7 @@
 \renewcommand{\headrulewidth}{0.4pt}
 
 % Left header text: course name/assignment number
-\lhead{CSE 5245 (Intro to Network Science) -- Lab 1}
+\lhead{CSE 5245 (Intro to Network Science) -- Lab 2}
 
 % Right header text: your name
 \rhead{Raman Ebrahimi}
@@ -176,7 +176,8 @@
 % --- Document starts here ---
 
 \begin{document}
-\paragraph{Note:}I did this lab assignment by working with Kiante. Therefore, the results and the codes are near.
+\paragraph{Note:}I did this lab assignment by working with Kiante. Therefore, the results and the codes are similar.
+\paragraph{Note:}The reason that I uploaded the results a bit late is that I was waiting for the code to compile one last time.
 \subsection*{Code explanation}
 
 \paragraph{}The first thing that was obstacle in this lab was the binary files. Binary files were not running on macOS, so we had to re-compile them to get their outputs. This was done by cloning GKlib, METIS, snap, and mlrmcl1.2 and compiling them using Terminal.
@@ -186,27 +187,112 @@ To get the outputs from the CNM algorithm for the YouTube dataset, I tried delet
 On the other hand, we could get the outputs for the other algorithms, and we changed the outputs' formats so we could use them for NetworkX pre-defined functions. These functions are in the Code Listing 1.
 
 \begin{lstlisting}[language=python, caption={Functions for output formats}, label={lst:Pycode}]
-#A list of frozensets of nodes, one for each community. Sorted by length with largest communities first.
-def convert_communities(G, communities):
-    communities_temp = communities.copy()
+def convert_communities_v2(G, communities):
+
+    directed = False 
+    dic = {}
+    id_map = {} 
+    node_num = 4039
+    edge_num = 88234
+
+    in_file = open(G, "rt")
+
+    for line in in_file:
+        if("#" in line):
+            if("Nodes" in line):
+                str_split = line.strip().split()
+                node_num = int(str_split[2])
+                edge_num = int(str_split[4])
+                print(node_num, edge_num)
+            continue
+        str_split = [int(ele) for ele in line.strip().split()]
+        if(str_split[0] == str_split[1]):
+            continue
+        if(str_split[0] in dic):
+            dic[str_split[0]].append(str_split[1])
+        else:
+            dic[str_split[0]] = []
+            dic[str_split[0]].append(str_split[1])
+        if(directed == False):
+            if(str_split[1] in dic):
+                dic[str_split[1]].append(str_split[0])
+            else:
+                dic[str_split[1]] = []
+                dic[str_split[1]].append(str_split[0])
+
+    count = 1 
+    key_set = [ele for ele in dic]
+    for ele in key_set:
+        id_map[ele] = count
+        count += 1
+
     cres = []
-    temp = communities.value_counts()
-    
-    communities_temp['Node_id'] = G.nodes #for the output fromt the gpmetis | mlrmcl
-    # if method == 1:
-    #     communities_temp['Node_id'] = G.nodes #for the output fromt the gpmetis | mlrmcl
-    # else: 
-    #     communities_temp['Node_id'] = communities.index.values #for the CNM
 
-    for com in np.concatenate(np.array(temp.index.values)):
-        com_temp = [communities_temp[communities_temp['Community'] == com]['Node_id'].values]
-        fnum = frozenset(set(com_temp[0]))
-        cres.append(fnum)
-    return cres
+    communityDict=defaultdict(set) # creates a dict of keys as community number and values as set of nodeIDs belonging to that community
+    communityFile = open(communities, "rt") # the output file obtained from community detection algorithm is given in argv[2]
 
+    outcount=1
+    # finds the nodeID for the metics file by looping through the mapping dictionary of the metis file
+    for ele in communityFile:
+        for node, counts in id_map.items():
+            if(outcount==counts):
+                communityDict[ele].add(node)
+        outcount+= 1
+
+    for key, value in communityDict.items():
+        cres.append(frozenset(value))
+
+        return cres
 \end{lstlisting}
+
+Moreover, we used the following functions to get conductance and normalized cuts.
+\begin{lstlisting}[language=python, caption={Functions for conductance and normalized cuts}, label={lst:Pycode}]
+
+def conductance_scores(g, c, plot = True):
+    c =  convert_communities(g,c)
+    #how to get the conductance for all the communities
+    conductance_scores_temp = [nx.conductance(g,communities_i, weight='weight') for communities_i in c]
+    if plot == True:
+        pd.Series(conductance_scores_temp).plot.hist(grid=True, bins=20, color='deepskyblue')
+        plt.title('Conductance scores for each community')
+        plt.xlabel('Conductance')
+        plt.ylabel('Counts')
+        plt.style.use('ggplot')
+        plt.grid(axis='y', alpha=0.75)
+        plt.show()
+    return conductance_scores_temp
+    
+def ncs_scores(g, c, plot = False):
+    c =  convert_communities(g,c)
+    #how to get the conductance for all the communities
+    ncs_scores_temp = [nx.normalized_cut_size(g,communities_i, weight='weight') for communities_i in c]
+    if plot == True:
+        pd.Series(ncs_scores_temp).plot.hist(grid=True, bins=20, color='deepskyblue')
+        plt.title('Normalized cut scores for each community')
+        plt.xlabel('Normalized cut')
+        plt.ylabel('Counts')
+        plt.style.use('ggplot')
+        plt.grid(axis='y', alpha=0.75)
+        plt.show()
+    return ncs_scores_temp
+\end{lstlisting}
+
+
+
 \newpage
 \subsection*{Results and comparisons}
+\paragraph{}In figure~\ref{fig:youtube_prune} we plotted the degree distribution to decide on how to delete the nodes from youtube dataset. The best that out code gave us was the pruned youtube dataset with removing node with degrees less than 20. The runtime of this result was about 8 minutes.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\textwidth]{output3.png}
+\captionsetup{justification=centering,margin=0.5cm}
+\caption{Degree distributions for youtube dataset for degrees between 0 and 100}
+\label{fig:youtube_prune}
+\end{figure}
+
+As we can see in figure~\ref{fig:youtube_prune}, deleting the nodes with degrees than 20 seems good. The results have 40852 nodes and 834676 edges with a modularity score of 0.58 and 51 communities.
+
 \paragraph{}After getting the desired format for the outputs, we used the networkx.algorithm.community library to compute the modularity of each output. In figure~\ref{fig:mod500}, we can see the bar plot for each dataset, except the YouTube dataset, and in figure~\ref{fig:clustering}, we can see two plots from the first lab assignment. 
 
 \begin{figure}[h]
@@ -238,7 +324,7 @@ Furthermore, by changing the -c 500 for MLR-MCL to -c 1000 and -c 10000 we got d
 
 As we can see, the score for facebook dataset grows but almost stays the same for other datasets.
 
-
+\paragraph{Final note:}I waited for the final results but since the assignment is closed, I will send the files as they are and I will send the updated files after I have them.
 
 \newpage
 
