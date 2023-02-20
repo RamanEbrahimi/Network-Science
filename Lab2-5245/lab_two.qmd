@@ -32,7 +32,7 @@ Load the five datasets:
 
 ```{python}
 wiki = pd.read_csv(
-    "/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/wiki-Vote.txt",
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/wiki-Vote.txt",
     sep='\\t',
     skiprows=4,
     names=["start_node", "end_node"],
@@ -40,7 +40,7 @@ wiki = pd.read_csv(
     engine='python'
 )
 quantum = pd.read_csv(
-    "/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/ca-GrQc.txt",
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/ca-GrQc.txt",
     sep='\\t',
     skiprows=4,
     names=["start_node", "end_node"],
@@ -48,7 +48,7 @@ quantum = pd.read_csv(
     engine='python'
 )
 gnutella = pd.read_csv(
-    "/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/p2p-Gnutella08.txt",
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/p2p-Gnutella08.txt",
     sep='\\t',
     skiprows=4,
     names=["start_node", "end_node"],
@@ -56,20 +56,21 @@ gnutella = pd.read_csv(
     engine='python'
 )
 facebook = pd.read_csv(
-    "/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/facebook_combined.txt",
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/facebook_combined.txt",
     sep=" ",
     names=["start_node", "end_node"],
     engine='python'
 )
 youtube = pd.read_csv(
-    "/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/com-youtube.ungraph.txt",
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/com-youtube.ungraph.txt",
     sep="\\t",
+    skiprows=4,
     names=["start_node", "end_node"],
     engine='python'
 )
 # load youtube version with nodes removed  (not sure why this version has issues with createing network object)
 youtube_pruned = pd.read_csv(
-    "/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/com-youtube_pruned.txt",
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/youtube_pruned.txt",
     sep=" ",
     names=["start_node", "end_node"]
     )
@@ -128,9 +129,9 @@ G5.graph['color'] = "red"
 graphs = [G1, G2, G3, G4, G5]
 graphs_wp = [G1, G2, G3, G4, G5_pruned]
 
-graphs = ["/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/wiki-Vote.txt","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/ca-GrQc.txt","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/p2p-Gnutella08.txt","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/facebook_combined.txt","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/com-youtube.ungraph.txt"]
+graphs = ["/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/wiki-Vote.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/ca-GrQc.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/p2p-Gnutella08.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/facebook_combined.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/com-youtube.ungraph.txt"]
 
-graphs_wp = ["/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/wiki-Vote.txt","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/ca-GrQc.txt","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/p2p-Gnutella08.txt","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/facebook_combined.txt","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/com-youtube_pruned.txt"]
+graphs_wp = ["/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/wiki-Vote.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/ca-GrQc.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/p2p-Gnutella08.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/facebook_combined.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/com-youtube_pruned.txt"]
 
 ```
 
@@ -142,17 +143,17 @@ graphs_wp = ["/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/d
 
 cd /Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/bin/METIS/build/programs
 
-./gpmetis /Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/wiki-Vote.metis 500
+./gpmetis /Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/wiki-Vote.metis 500
 
-./gpmetis /Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/ca-GrQc.metis 500
+./gpmetis /Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/ca-GrQc.metis 500
 
-./gpmetis /Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/ca-GrQc.metis 500
+./gpmetis /Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/ca-GrQc.metis 500
 
-./gpmetis /Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/p2p-Gnutella08.metis 500
+./gpmetis /Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/p2p-Gnutella08.metis 500
 
-./gpmetis /Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/facebook_combined.metis 500
+./gpmetis /Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/facebook_combined.metis 500
 
-./gpmetis /Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/com-youtube.ungraph.metis 500
+./gpmetis /Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/com-youtube.ungraph.metis 500
 ```
 
 ## MLR-MCL
@@ -161,15 +162,15 @@ cd /Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/bi
 
 cd /Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/bin/mlrmcl1.2
 
-./mlrmcl -c 500 /Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/wiki-Vote.metis -o /Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/mlrmcl/wiki-Vote.metis.c500 > /Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/mlrmcl/wiki-Vote.out
+./mlrmcl -c 500 /Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/wiki-Vote.metis -o /Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/mlrmcl/wiki-Vote.metis.c500 > /Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/mlrmcl/wiki-Vote.out
 
-./mlrmcl -c 500 /Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/ca-GrQc.metis -o /Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/mlrmcl/ca-GrQc.metis.c500 > /Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/mlrmcl/ca-GrQc.out
+./mlrmcl -c 500 /Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/ca-GrQc.metis -o /Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/mlrmcl/ca-GrQc.metis.c500 > /Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/mlrmcl/ca-GrQc.out
 
-./mlrmcl -c 500 /Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/p2p-Gnutella08.metis -o /Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/mlrmcl/p2p-Gnutella08.metis.c500 > /Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/mlrmcl/p2p-Gnutella08.out
+./mlrmcl -c 500 /Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/p2p-Gnutella08.metis -o /Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/mlrmcl/p2p-Gnutella08.metis.c500 > /Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/mlrmcl/p2p-Gnutella08.out
 
-./mlrmcl -c 500 /Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/facebook_combined.metis -o /Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/mlrmcl/facebook_combined.metis.c500 > /Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/mlrmcl/facebook_combined.out
+./mlrmcl -c 500 /Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/facebook_combined.metis -o /Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/mlrmcl/facebook_combined.metis.c500 > /Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/mlrmcl/facebook_combined.out
 
-./mlrmcl -c 500 /Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/com-youtube.ungraph.metis -o /Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/mlrmcl/com-youtube.ungraph.metis.c500 > /Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/mlrmcl/com-youtube.ungraph.out
+./mlrmcl -c 500 /Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/com-youtube.ungraph.metis -o /Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/mlrmcl/com-youtube.ungraph.metis.c500 > /Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/mlrmcl/com-youtube.ungraph.out
 ```
 
 ## Clauset-Newman-Moore greedy modularity maximization 
@@ -179,15 +180,15 @@ cd /Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/bi
 
 cd /Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/bin/snap/examples/community
 
-./community -i:/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/wiki-Vote.txt -o:/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/Clauset-Newman-Moore/CNM_wiki-Vote.txt -a:2
+./community -i:/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/wiki-Vote.txt -o:/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Clauset-Newman-Moore/CNM_wiki-Vote.txt -a:2
 
-./community -i:/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/ca-GrQc.txt -o:/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/Clauset-Newman-Moore/CNM_ca-GrQc.txt -a:2
+./community -i:/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/ca-GrQc.txt -o:/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Clauset-Newman-Moore/CNM_ca-GrQc.txt -a:2
 
-./community -i:/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/p2p-Gnutella08.txt -o:/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/Clauset-Newman-Moore/CNM_p2p-Gnutella08.txt -a:2
+./community -i:/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/p2p-Gnutella08.txt -o:/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Clauset-Newman-Moore/CNM_p2p-Gnutella08.txt -a:2
 
-./community -i:/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/facebook_combined.txt -o:/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/Clauset-Newman-Moore/CNM_facebook_combined.txt -a:2
+./community -i:/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/facebook_combined.txt -o:/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Clauset-Newman-Moore/CNM_facebook_combined.txt -a:2
 
-./community -i:/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/com-youtube_pruned.txt -o:/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/Clauset-Newman-Moore/CNM_youtube_pruned.txt -a:2
+./community -i:/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/com-youtube_pruned.txt -o:/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Clauset-Newman-Moore/CNM_youtube_pruned.txt -a:2
 ```
 
 # meta-level analysis of correlation of various measures of community detection quality 
@@ -203,55 +204,55 @@ load_options = {"sep": '\\t', "names":["Community"], "header":None}
 
 # METIS
 metis_cd_wiki = pd.read_csv(
-    "/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/METIS/wiki-Vote.metis.part.500",
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/METIS/wiki-Vote.metis.part.500",
     **load_options
 )
 metis_cd_quantum = pd.read_csv(
-    "/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/METIS/ca-GrQc.metis.part.500",
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/METIS/ca-GrQc.metis.part.500",
     **load_options
 )
 metis_cd_gnutella = pd.read_csv(
-    "/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/METIS/p2p-Gnutella08.metis.part.500",
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/METIS/p2p-Gnutella08.metis.part.500",
     **load_options
 )
 metis_cd_facebook = pd.read_csv(
-    "/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/METIS/facebook_combined.metis.part.500",
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/METIS/facebook_combined.metis.part.500",
     **load_options
 )
 metis_cd_youtube = pd.read_csv(
-    "/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/METIS/com-youtube.ungraph.metis.part.500",
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/METIS/com-youtube.ungraph.metis.part.500",
     **load_options
 )
 
 # metis_communities = [metis_cd_wiki,metis_cd_quantum,metis_cd_gnutella,metis_cd_facebook, metis_cd_youtube]
-metis_communities = ["/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/METIS/wiki-Vote.metis.part.500","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/METIS/ca-GrQc.metis.part.500","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/METIS/p2p-Gnutella08.metis.part.500","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/METIS/facebook_combined.metis.part.500","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/METIS/com-youtube.ungraph.metis.part.500"]
+metis_communities = ["/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/METIS/wiki-Vote.metis.part.500","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/METIS/ca-GrQc.metis.part.500","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/METIS/p2p-Gnutella08.metis.part.500","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/METIS/facebook_combined.metis.part.500","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/METIS/com-youtube.ungraph.metis.part.500"]
 
 ```
 
 ```{python}
 #mlrmcl
 mlrmcl_cd_wiki = pd.read_csv(
-    "/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/mlrmcl/wiki-Vote.metis.c500",
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/mlrmcl/wiki-Vote.metis.c500",
     **load_options
 )
 mlrmcl_cd_quantum = pd.read_csv(
-    "/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/mlrmcl/ca-GrQc.metis.c500",
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/mlrmcl/ca-GrQc.metis.c500",
     **load_options
 )
 mlrmcl_cd_gnutella = pd.read_csv(
-    "/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/mlrmcl/p2p-Gnutella08.metis.c500",
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/mlrmcl/p2p-Gnutella08.metis.c500",
     **load_options
 )
 mlrmcl_cd_facebook = pd.read_csv(
-    "/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/mlrmcl/facebook_combined.metis.c500",
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/mlrmcl/facebook_combined.metis.c500",
     **load_options
 )
 mlrmcl_cd_youtube = pd.read_csv(
-    "/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/mlrmcl/com-youtube.ungraph.metis.c500",
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/mlrmcl/com-youtube.ungraph.metis.c500",
     **load_options
 )
 # mlrmcl_communities = [mlrmcl_cd_wiki,mlrmcl_cd_quantum,mlrmcl_cd_gnutella,mlrmcl_cd_facebook, mlrmcl_cd_youtube]
-mlrmcl_communities = ["/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/mlrmcl/wiki-Vote.metis.c500","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/mlrmcl/ca-GrQc.metis.c500","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/mlrmcl/p2p-Gnutella08.metis.c500","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/mlrmcl/facebook_combined.metis.c500","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/mlrmcl/com-youtube.ungraph.metis.c500"]
+mlrmcl_communities = ["/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/mlrmcl/wiki-Vote.metis.c500","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/mlrmcl/ca-GrQc.metis.c500","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/mlrmcl/p2p-Gnutella08.metis.c500","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/mlrmcl/facebook_combined.metis.c500","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/mlrmcl/com-youtube.ungraph.metis.c500"]
 
 ```
 
@@ -260,33 +261,33 @@ load_options = {"sep": '\\t', "names":["Community"], "header":None, "skiprows": 
 
 #Clauset-Newman-Moore
 cnm_cd_wiki = pd.read_csv(
-    "/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/Clauset-Newman-Moore/CNM_wiki-Vote.txt",
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Clauset-Newman-Moore/CNM_wiki-Vote.txt",
     **load_options
 )
 
 cnm_cd_quantum = pd.read_csv(
-    "/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/Clauset-Newman-Moore/CNM_ca-GrQc.txt",
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Clauset-Newman-Moore/CNM_ca-GrQc.txt",
     **load_options
 )
 
 cnm_cd_quantum = cnm_cd_quantum[cnm_cd_quantum.index != 12295] #just remove the node from the analysis
 
 cnm_cd_gnutella = pd.read_csv(
-    "/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/Clauset-Newman-Moore/CNM_p2p-Gnutella08.txt",
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Clauset-Newman-Moore/CNM_p2p-Gnutella08.txt",
     **load_options
 )
 cnm_cd_facebook = pd.read_csv(
-    "/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/Clauset-Newman-Moore/CNM_facebook_combined.txt",
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Clauset-Newman-Moore/CNM_facebook_combined.txt",
     **load_options
 )
 cnm_cd_youtube = pd.read_csv(
-    "/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/Clauset-Newman-Moore/CNM_youtube_pruned.txt",
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Clauset-Newman-Moore/CNM_youtube_pruned.txt",
     **load_options
 )
 
 # cnm_communities = [cnm_cd_wiki,cnm_cd_quantum,cnm_cd_gnutella,cnm_cd_facebook, cnm_cd_youtube]
 
-cnm_communities = ["/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/Clauset-Newman-Moore/CNM_wiki-Vote.txt","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/Clauset-Newman-Moore/CNM_ca-GrQc.txt","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/Clauset-Newman-Moore/CNM_p2p-Gnutella08.txt","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/Clauset-Newman-Moore/CNM_facebook_combined.txt","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/Clauset-Newman-Moore/CNM_youtube_pruned.txt"]
+cnm_communities = ["/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Clauset-Newman-Moore/CNM_wiki-Vote.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Clauset-Newman-Moore/CNM_ca-GrQc.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Clauset-Newman-Moore/CNM_p2p-Gnutella08.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Clauset-Newman-Moore/CNM_facebook_combined.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Clauset-Newman-Moore/CNM_youtube_pruned.txt"]
 
 ```
 
@@ -402,9 +403,9 @@ def convert_communities_v2(G, communities):
         return cres
 
 
-# G = "/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/facebook_combined.txt"
+# G = "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/facebook_combined.txt"
 
-# communities = "/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/METIS/facebook_combined.metis.part.500"
+# communities = "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/METIS/facebook_combined.metis.part.500"
 
 # testing  = convert_communities_v2(G, communities)
 ```
