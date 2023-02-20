@@ -126,12 +126,14 @@ G4.graph['color'] = "darkorange"
 G5.graph['color'] = "red"
 
 #graphs = [G1, G2, G3, G4, G5]
-graphs = [G1, G2, G3, G4, G5]
-graphs_wp = [G1, G2, G3, G4, G5_pruned]
+Graphs = [G1, G2, G3, G4] #G5
+Graphs_wp = [G1, G2, G3, G4] #G5_pruned
 
-graphs = ["/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/wiki-Vote.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/ca-GrQc.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/p2p-Gnutella08.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/facebook_combined.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/com-youtube.ungraph.txt"]
+graphs = ["/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/wiki-Vote.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/ca-GrQc.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/p2p-Gnutella08.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/facebook_combined.txt"]
+# ,"/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/com-youtube.ungraph.txt
 
-graphs_wp = ["/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/wiki-Vote.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/ca-GrQc.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/p2p-Gnutella08.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/facebook_combined.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/com-youtube_pruned.txt"]
+graphs_wp = ["/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/wiki-Vote.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/ca-GrQc.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/p2p-Gnutella08.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/facebook_combined.txt"]
+# ,"/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/com-youtube_pruned.txt
 
 ```
 
@@ -234,37 +236,37 @@ write a function that gives you the format to use the network X functions.
 
 ```{python}
 #A list of frozensets of nodes, one for each community. Sorted by length with largest communities first.
-# def convert_communities(G, communities):
-#     """
-#     Converts list output to A list of frozensets of nodes, one for each community. Sorted by length with largest communities first (i.e. the input that Networkx functions take)
-#     Parameters
-#     ----------
-#     G : NetworkX Graph
+def convert_communities(G, communities):
+    """
+    Converts list output to A list of frozensets of nodes, one for each community. Sorted by length with largest communities first (i.e. the input that Networkx functions take)
+    Parameters
+    ----------
+    G : NetworkX Graph
 
-#     communities : the Dataframe from containing the output from the community detection algo
+    communities : the Dataframe from containing the output from the community detection algo
 
-#     method : an integer to indicate which community detection method results are being converted
+    method : an integer to indicate which community detection method results are being converted
 
-#     Returns
-#     -------
-#     cres : list
-#        A list of frozensets of nodes, one for each community. Sorted by length with largest communities first.
-#     """
-#     communities_temp = communities.copy()
-#     cres = []
-#     temp = communities.value_counts()
+    Returns
+    -------
+    cres : list
+       A list of frozensets of nodes, one for each community. Sorted by length with largest communities first.
+    """
+    communities_temp = communities.copy()
+    cres = []
+    temp = communities.value_counts()
     
-#     communities_temp['Node_id'] = G.nodes #for the output fromt the gpmetis | mlrmcl
-#     # if method == 1:
-#     #     communities_temp['Node_id'] = G.nodes #for the output fromt the gpmetis | mlrmcl
-#     # else: 
-#     #     communities_temp['Node_id'] = communities.index.values #for the CNM
+    communities_temp['Node_id'] = G.nodes #for the output fromt the gpmetis | mlrmcl
+    # if method == 1:
+    #     communities_temp['Node_id'] = G.nodes #for the output fromt the gpmetis | mlrmcl
+    # else: 
+    #     communities_temp['Node_id'] = communities.index.values #for the CNM
 
-#     for com in np.concatenate(np.array(temp.index.values)):
-#         com_temp = [communities_temp[communities_temp['Community'] == com]['Node_id'].values]
-#         fnum = frozenset(set(com_temp[0]))
-#         cres.append(fnum)
-#     return cres
+    for com in np.concatenate(np.array(temp.index.values)):
+        com_temp = [communities_temp[communities_temp['Community'] == com]['Node_id'].values]
+        fnum = frozenset(set(com_temp[0]))
+        cres.append(fnum)
+    return cres
 
 ```
 
@@ -402,24 +404,24 @@ dist1 = conductance_scores(G1, metis_cd_wiki)
 dist2 = conductance_scores(G2, metis_cd_quantum)
 dist3 = conductance_scores(G3, metis_cd_gnutella)
 dist4 = conductance_scores(G4, metis_cd_facebook)
-dist13 = conductance_scores(G5, metis_cd_youtube)
+# dist13 = conductance_scores(G5, metis_cd_youtube)
 
 dist5 = conductance_scores(G1, mlrmcl_cd_wiki)
 dist6 = conductance_scores(G2, mlrmcl_cd_quantum)
 dist7 = conductance_scores(G3, mlrmcl_cd_gnutella)
 dist8 = conductance_scores(G4, mlrmcl_cd_facebook)
-dist14 = conductance_scores(G5, mlrmcl_cd_youtube)
+# dist14 = conductance_scores(G5, mlrmcl_cd_youtube)
 
 dist9 = conductance_scores(G1, cnm_cd_wiki)
 dist10 = conductance_scores(G2, cnm_cd_quantum)
 dist11 = conductance_scores(G3, cnm_cd_gnutella)
 dist12 = conductance_scores(G4, cnm_cd_facebook)
-dist15 = conductance_scores(G5_pruned, cnm_cd_youtube)
+# dist15 = conductance_scores(G5_pruned, cnm_cd_youtube)
 
 cols = ['gpmetis', 'mlrmcl', 'cnm']
 rows =  ['Wikipedia', 'Physics', 'Gnutella', 'Facebook', 'YouTube']
 # fig, axs = plt.subplots(2, 2, tight_layout=True)
-fig, axs = plt.subplots(5, 3, tight_layout=True)
+fig, axs = plt.subplots(4, 3, tight_layout=True)
 
 for ax, col in zip(axs[0], cols):
     ax.set_title(col)
@@ -462,16 +464,6 @@ axs[3,1].axvline(np.median(dist8), color='k', linestyle='dashed', linewidth=1)
 
 axs[3,2].hist(dist12, bins=n_bins, color='blue')
 axs[3,2].axvline(np.median(dist12), color='k', linestyle='dashed', linewidth=1)
-
-axs[4,0].hist(dist13, bins=n_bins, color='blue')
-axs[4,0].axvline(np.median(dist4), color='k', linestyle='dashed', linewidth=1)
-
-axs[4,1].hist(dist14, bins=n_bins, color='blue')
-axs[4,1].axvline(np.median(dist8), color='k', linestyle='dashed', linewidth=1)
-
-axs[4,2].hist(dist15, bins=n_bins, color='blue')
-axs[4,2].axvline(np.median(dist12), color='k', linestyle='dashed', linewidth=1)
-
 #np.mean(conductance_scores)
 ```
 

@@ -324,6 +324,21 @@ Furthermore, by changing the -c 500 for MLR-MCL to -c 1000 and -c 10000 we got d
 
 As we can see, the score for facebook dataset grows but almost stays the same for other datasets.
 
+Another measure computed was conductance. Conductance is a measure of the connectivity between a subgraph of a network and the rest of the network. Specifically, it measures the ratio of the number of edges that connect the nodes within the subgraph to nodes outside the subgraph, to the total number of edges incident on the nodes in the subgraph.
+
+Intuitively, a subgraph with high conductance has many edges that connect it to the rest of the network, indicating that it is not well-separated from the rest of the network. A subgraph with low conductance, on the other hand, has relatively few edges that connect it to the rest of the network, indicating that it is more isolated or distinct from the rest of the network.
+
+In figure~\ref{fig:conductance} we can see the conductance for all algorithms and datasets, except the YouTube algorithm which took too long to get the results, and was the reason I uploaded this file late!
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\textwidth]{conductance.png}
+\includegraphics[width=0.5\textwidth]{ncs.png}
+\captionsetup{justification=centering,margin=0.5cm}
+\caption{Conductance (upper) and normalized cuts (lower) for different algorithms on different datasets.}
+\label{fig:conductance}
+\end{figure}
+
 \paragraph{Final note:}I waited for the final results but since the assignment is closed, I will send the files as they are and I will send the updated files after I have them.
 
 \newpage
