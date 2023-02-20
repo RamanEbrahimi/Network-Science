@@ -15,6 +15,11 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from random import randint
 import time
+import gzip
+from collections import defaultdict
+import networkx.algorithms.community as nx_comm
+from sklearn.metrics.cluster import normalized_mutual_info_score
+
 ```
 
 Load the five datasets:
@@ -86,7 +91,6 @@ G5_pruned = nx.from_pandas_edgelist(youtube_pruned, "start_node", "end_node")
 #### Using sparsifier
 
 #### Prune by degree
-
 ```{python}
 # extract a list of nodes with degree lower than a threshold
 def extract_nodes(G, threshold):
@@ -104,14 +108,12 @@ def remove_nodes(G, threshold):
     return G_temp
 
 # get the pruned graph
-G5_pruned = remove_nodes(G5, 20)
+# G5_pruned = remove_nodes(G5, 20)
+
+deleted_nodes = extract_nodes(G5, 20)[0]
 
 # nx.write_edgelist(G_pruned, 'youtube_pruned.txt', data=False)
 ```
-#### Prune by random sampling
-
-#### Prune by specific communities
-
 
 ```{python}
 # plot_options = {"node_size": 9, "with_labels": False, "width": 0.15}
@@ -126,20 +128,9 @@ G5.graph['color'] = "red"
 graphs = [G1, G2, G3, G4, G5]
 graphs_wp = [G1, G2, G3, G4, G5_pruned]
 
+graphs = ["/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/wiki-Vote.txt","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/ca-GrQc.txt","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/p2p-Gnutella08.txt","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/facebook_combined.txt","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/com-youtube.ungraph.txt"]
 
-# fig, axes = plt.subplots(2,3)
-# fig.suptitle("Networks of interest", fontsize=16)
-# for graph, ax in zip(graphs, axes.ravel()):
-#     pos = nx.spring_layout(graph, iterations=15, seed=1721)
-#     nx.draw(graph, pos=pos, ax=ax, node_color=graph.graph['color'], **plot_options)
-#     ax.axis("off")
-
-# axes[0, 0].set_title('Wikipedia vote')
-# axes[0, 1].set_title('Physics collaboration')
-# axes[1, 0].set_title('Gnutella peer-to-peer')
-# axes[1, 1].set_title('Social circles: Facebook')
-# axes[1, 2].set_title('Youtube')
-# plt.show()
+graphs_wp = ["/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/wiki-Vote.txt","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/ca-GrQc.txt","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/p2p-Gnutella08.txt","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/facebook_combined.txt","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/com-youtube_pruned.txt"]
 
 ```
 
@@ -232,7 +223,8 @@ metis_cd_youtube = pd.read_csv(
     **load_options
 )
 
-metis_communities = [metis_cd_wiki,metis_cd_quantum,metis_cd_gnutella,metis_cd_facebook, metis_cd_youtube]
+# metis_communities = [metis_cd_wiki,metis_cd_quantum,metis_cd_gnutella,metis_cd_facebook, metis_cd_youtube]
+metis_communities = ["/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/METIS/wiki-Vote.metis.part.500","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/METIS/ca-GrQc.metis.part.500","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/METIS/p2p-Gnutella08.metis.part.500","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/METIS/facebook_combined.metis.part.500","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/METIS/com-youtube.ungraph.metis.part.500"]
 
 ```
 
@@ -258,7 +250,9 @@ mlrmcl_cd_youtube = pd.read_csv(
     "/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/mlrmcl/com-youtube.ungraph.metis.c500",
     **load_options
 )
-mlrmcl_communities = [mlrmcl_cd_wiki,mlrmcl_cd_quantum,mlrmcl_cd_gnutella,mlrmcl_cd_facebook, mlrmcl_cd_youtube]
+# mlrmcl_communities = [mlrmcl_cd_wiki,mlrmcl_cd_quantum,mlrmcl_cd_gnutella,mlrmcl_cd_facebook, mlrmcl_cd_youtube]
+mlrmcl_communities = ["/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/mlrmcl/wiki-Vote.metis.c500","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/mlrmcl/ca-GrQc.metis.c500","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/mlrmcl/p2p-Gnutella08.metis.c500","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/mlrmcl/facebook_combined.metis.c500","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/mlrmcl/com-youtube.ungraph.metis.c500"]
+
 ```
 
 ```{python}
@@ -290,7 +284,9 @@ cnm_cd_youtube = pd.read_csv(
     **load_options
 )
 
-cnm_communities = [cnm_cd_wiki,cnm_cd_quantum,cnm_cd_gnutella,cnm_cd_facebook, cnm_cd_youtube]
+# cnm_communities = [cnm_cd_wiki,cnm_cd_quantum,cnm_cd_gnutella,cnm_cd_facebook, cnm_cd_youtube]
+
+cnm_communities = ["/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/Clauset-Newman-Moore/CNM_wiki-Vote.txt","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/Clauset-Newman-Moore/CNM_ca-GrQc.txt","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/Clauset-Newman-Moore/CNM_p2p-Gnutella08.txt","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/Clauset-Newman-Moore/CNM_facebook_combined.txt","/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/Clauset-Newman-Moore/CNM_youtube_pruned.txt"]
 
 ```
 
@@ -298,114 +294,129 @@ cnm_communities = [cnm_cd_wiki,cnm_cd_quantum,cnm_cd_gnutella,cnm_cd_facebook, c
 write a function that gives you the format to use the network X functions.
 
 ```{python}
-import networkx.algorithms.community as nx_comm
-
 #A list of frozensets of nodes, one for each community. Sorted by length with largest communities first.
-def convert_communities(G, communities):
+# def convert_communities(G, communities):
+#     """
+#     Converts list output to A list of frozensets of nodes, one for each community. Sorted by length with largest communities first (i.e. the input that Networkx functions take)
+#     Parameters
+#     ----------
+#     G : NetworkX Graph
+
+#     communities : the Dataframe from containing the output from the community detection algo
+
+#     method : an integer to indicate which community detection method results are being converted
+
+#     Returns
+#     -------
+#     cres : list
+#        A list of frozensets of nodes, one for each community. Sorted by length with largest communities first.
+#     """
+#     communities_temp = communities.copy()
+#     cres = []
+#     temp = communities.value_counts()
+    
+#     communities_temp['Node_id'] = G.nodes #for the output fromt the gpmetis | mlrmcl
+#     # if method == 1:
+#     #     communities_temp['Node_id'] = G.nodes #for the output fromt the gpmetis | mlrmcl
+#     # else: 
+#     #     communities_temp['Node_id'] = communities.index.values #for the CNM
+
+#     for com in np.concatenate(np.array(temp.index.values)):
+#         com_temp = [communities_temp[communities_temp['Community'] == com]['Node_id'].values]
+#         fnum = frozenset(set(com_temp[0]))
+#         cres.append(fnum)
+#     return cres
+
+```
+
+
+```{python}
+
+def convert_communities_v2(G, communities):
     """
     Converts list output to A list of frozensets of nodes, one for each community. Sorted by length with largest communities first (i.e. the input that Networkx functions take)
     Parameters
     ----------
-    G : NetworkX Graph
+    G : text file
 
-    communities : the Dataframe from containing the output from the community detection algo
-
-    method : an integer to indicate which community detection method results are being converted
+    communities : text file
 
     Returns
     -------
     cres : list
        A list of frozensets of nodes, one for each community. Sorted by length with largest communities first.
     """
-    communities_temp = communities.copy()
-    cres = []
-    temp = communities.value_counts()
-    
-    communities_temp['Node_id'] = G.nodes #for the output fromt the gpmetis | mlrmcl
-    # if method == 1:
-    #     communities_temp['Node_id'] = G.nodes #for the output fromt the gpmetis | mlrmcl
-    # else: 
-    #     communities_temp['Node_id'] = communities.index.values #for the CNM
+    directed = False 
+    dic = {}
+    id_map = {} 
+    node_num = 4039
+    edge_num = 88234
 
-    for com in np.concatenate(np.array(temp.index.values)):
-        com_temp = [communities_temp[communities_temp['Community'] == com]['Node_id'].values]
-        fnum = frozenset(set(com_temp[0]))
-        cres.append(fnum)
-    return cres
+    in_file = open(G, "rt")
 
-```
-
-
-```{python}
-
-import gzip
-from collections import defaultdict
-
-directed = False 
-dic = {}
-id_map = {} 
-node_num = 4039
-edge_num = 88234
-
-in_file = open("/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/wiki-Vote.txt", "rt")
-
-for line in in_file:
-    if("#" in line):
-        if("Nodes" in line):
-            str_split = line.strip().split()
-            node_num = len(G1.nodes)
-            edge_num = len(G1.edges)
-            print(node_num, edge_num)
-        continue
-    str_split = [int(ele) for ele in line.strip().split()]
-    if(str_split[0] == str_split[1]):
-        continue
-    if(str_split[0] in dic):
-        dic[str_split[0]].append(str_split[1])
-    else:
-        dic[str_split[0]] = []
-        dic[str_split[0]].append(str_split[1])
-    if(directed == False):
-        if(str_split[1] in dic):
-            dic[str_split[1]].append(str_split[0])
+    for line in in_file:
+        if("#" in line):
+            if("Nodes" in line):
+                str_split = line.strip().split()
+                node_num = int(str_split[2])
+                edge_num = int(str_split[4])
+                print(node_num, edge_num)
+            continue
+        str_split = [int(ele) for ele in line.strip().split()]
+        if(str_split[0] == str_split[1]):
+            continue
+        if(str_split[0] in dic):
+            dic[str_split[0]].append(str_split[1])
         else:
-            dic[str_split[1]] = []
-            dic[str_split[1]].append(str_split[0])
+            dic[str_split[0]] = []
+            dic[str_split[0]].append(str_split[1])
+        if(directed == False):
+            if(str_split[1] in dic):
+                dic[str_split[1]].append(str_split[0])
+            else:
+                dic[str_split[1]] = []
+                dic[str_split[1]].append(str_split[0])
 
-count = 1 
-key_set = [ele for ele in dic]
-for ele in key_set:
-    id_map[ele] = count
-    count += 1
+    count = 1 
+    key_set = [ele for ele in dic]
+    for ele in key_set:
+        id_map[ele] = count
+        count += 1
+
+    cres = []
+
+    communityDict=defaultdict(set) # creates a dict of keys as community number and values as set of nodeIDs belonging to that community
+    communityFile = open(communities, "rt") # the output file obtained from community detection algorithm is given in argv[2]
+
+    outcount=1
+    # finds the nodeID for the metics file by looping through the mapping dictionary of the metis file
+    for ele in communityFile:
+        for node, counts in id_map.items():
+            if(outcount==counts):
+                communityDict[ele].add(node)
+        outcount+= 1
+
+    for key, value in communityDict.items():
+        cres.append(frozenset(value))
+
+        return cres
 
 
-cres = []
+# G = "/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/facebook_combined.txt"
 
-communityDict=defaultdict(set) # creates a dict of keys as community number and values as set of nodeIDs belonging to that community
-communityFile = open("/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/METIS/wiki-Vote.metis.part.500", "rt") # the output file obtained from community detection algorithm is given in argv[2]
+# communities = "/Users/kiantefernandez/Documents/OSU/Spring_2023/network_science/data/Lab2/data/METIS/facebook_combined.metis.part.500"
 
-outcount=1
-# finds the nodeID for the metics file by looping through the mapping dictionary of the metis file
-for ele in communityFile:
-	for node, counts in id_map.items():
-		if(outcount==counts):
-			communityDict[ele].add(node)
-	outcount+= 1
-
-for key, value in communityDict.items():
-	cres.append(frozenset(value))
-
-
-
+# testing  = convert_communities_v2(G, communities)
 ```
 
 ```{python}
+
 # convert_communities(G5, metis_cd_youtube)
 
 #get modularity of the graphs
-comms1 = list(map(convert_communities, graphs, metis_communities))
-comms2 =list(map(convert_communities, graphs, mlrmcl_communities))
-comms3 =list(map(convert_communities, graphs_wp, cnm_communities))
+comms1 = list(map(convert_communities_v2, graphs, metis_communities))
+comms2 =list(map(convert_communities_v2, graphs, mlrmcl_communities))
+comms3 =list(map(convert_communities_v2, graphs_wp, cnm_communities))
 
 # comms3 = [convert_communities(g, c, method = 2) for g in graphs for c in cnm_communities]
 
@@ -415,9 +426,6 @@ mod_res3 = list(map(nx_comm.modularity, graphs_wp, comms3))
 ```
 
 ```{python}
-# TODO we want a barplot wiht modulariy for each of the algos and for each of the graphs
-        #so it will have modularity on y and algo on x with 5 bars for each of the three algos
-
 # Split the DataFrame into four columns, taking 5 elements at a time
 df1 = pd.DataFrame(mod_res1, columns=['gpmetis'])
 df2 = pd.DataFrame(mod_res2, columns=['mlrmcl'])
@@ -427,7 +435,6 @@ df3 = pd.DataFrame(mod_res3, columns=['cnm'])
 result = pd.concat([df1, df2, df3], axis=1)
 
 # Rename the columns as desired
-# result.columns = ['gpmetis', 'mlrmcl', 'cnm']
 result.index = ['Wikipedia', 'Physics', 'Gnutella', 'Facebook', 'Youtube']
 print(result.round(3))
 
@@ -622,3 +629,10 @@ axs[3,2].axvline(np.median(dist12), color='k', linestyle='dashed', linewidth=1)
 ```
 
 ### ground truth
+
+```{python}
+#load ground truth
+
+#normalized_mutual_info_score([0, 0, 1, 1], [0, 0, 1, 1])
+
+```
