@@ -1,0 +1,569 @@
+---
+title: "CSE 5245 (SPR’22)Introduction to Network Science – Lab 1"
+format:
+  html:
+    code-fold: false
+jupyter: network_science
+---
+
+Import packages
+```{python}
+%matplotlib inline
+import pandas as pd
+import numpy as np
+import networkx as nx
+import matplotlib.pyplot as plt
+from random import randint
+import time
+import gzip
+from collections import defaultdict
+import networkx.algorithms.community as nx_comm
+from sklearn.metrics.cluster import normalized_mutual_info_score
+
+```
+
+Load the five datasets:
+
+- Wikipedia vote network
+- General Relativity and Quantum Cosmology collaboration network
+- Gnutella peer-to-peer network, August 8 2002
+- Social circles: Facebook
+- Youtube social network
+
+```{python}
+wiki = pd.read_csv(
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/wiki-Vote.txt",
+    sep='\\t',
+    skiprows=4,
+    names=["start_node", "end_node"],
+    header = None,
+    engine='python'
+)
+quantum = pd.read_csv(
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/ca-GrQc.txt",
+    sep='\\t',
+    skiprows=4,
+    names=["start_node", "end_node"],
+    header = None,
+    engine='python'
+)
+gnutella = pd.read_csv(
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/p2p-Gnutella08.txt",
+    sep='\\t',
+    skiprows=4,
+    names=["start_node", "end_node"],
+    header = None,
+    engine='python'
+)
+facebook = pd.read_csv(
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/facebook_combined.txt",
+    sep=" ",
+    names=["start_node", "end_node"],
+    engine='python'
+)
+youtube = pd.read_csv(
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/com-youtube.ungraph.txt",
+    sep="\\t",
+    skiprows=4,
+    names=["start_node", "end_node"],
+    engine='python'
+)
+# load youtube version with nodes removed  (not sure why this version has issues with createing network object)
+youtube_pruned = pd.read_csv(
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/youtube_pruned.txt",
+    sep=" ",
+    names=["start_node", "end_node"]
+    )
+
+G1 = nx.from_pandas_edgelist(wiki, "start_node", "end_node")
+G2 = nx.from_pandas_edgelist(quantum, "start_node", "end_node")
+#len(G2.nodes)
+G2.remove_node(12295) # remove single node with self-loop, This prevents some issues later. 
+#len(G2.nodes)
+G3 = nx.from_pandas_edgelist(gnutella, "start_node", "end_node")
+G4 = nx.from_pandas_edgelist(facebook, "start_node", "end_node")
+G5 = nx.from_pandas_edgelist(youtube, "start_node", "end_node")
+G5_pruned = nx.from_pandas_edgelist(youtube_pruned, "start_node", "end_node")
+
+```
+
+## Addressing the Youtube dataset (for Clauset-Newman-Moore)
+
+#### Using sparsifier
+
+#### Prune by degree
+```{python}
+# extract a list of nodes with degree lower than a threshold
+def extract_nodes(G, threshold):
+    nodes = []
+    for node in G.nodes():
+        if G.degree(node) < threshold:
+            nodes.append(node)
+    return nodes, len(nodes)
+
+# remove nodes with degree lower than a threshold
+def remove_nodes(G, threshold):
+    G_temp = G.copy()
+    nodes, n = extract_nodes(G_temp, threshold)
+    G_temp.remove_nodes_from(nodes)
+    return G_temp
+
+# get the pruned graph
+# G5_pruned = remove_nodes(G5, 20)
+
+deleted_nodes = extract_nodes(G5, 20)[0]
+
+# nx.write_edgelist(G_pruned, 'youtube_pruned.txt', data=False)
+```
+
+```{python}
+# plot_options = {"node_size": 9, "with_labels": False, "width": 0.15}
+
+G1.graph['color'] = "gold"
+G2.graph['color'] = "violet"
+G3.graph['color'] = "limegreen"
+G4.graph['color'] = "darkorange"
+G5.graph['color'] = "red"
+
+#graphs = [G1, G2, G3, G4, G5]
+Graphs = [G1, G2, G3, G4] #G5
+Graphs_wp = [G1, G2, G3, G4] #G5_pruned
+
+graphs = ["/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/wiki-Vote.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/ca-GrQc.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/p2p-Gnutella08.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/facebook_combined.txt"]
+# ,"/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/com-youtube.ungraph.txt
+
+graphs_wp = ["/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/wiki-Vote.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/ca-GrQc.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/p2p-Gnutella08.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/facebook_combined.txt"]
+# ,"/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/com-youtube_pruned.txt
+
+```
+
+First load the results from each of communitiy dectection algos 
+```{python}
+#load the results (which are all txt files)
+load_options = {"sep": '\\t', "names":["Community"], "header":None}
+
+# METIS
+metis_cd_wiki = pd.read_csv(
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Outputs/METIS/wiki-Vote.metis.part.500",
+    **load_options
+)
+metis_cd_quantum = pd.read_csv(
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Outputs/METIS/ca-GrQc.metis.part.500",
+    **load_options
+)
+metis_cd_gnutella = pd.read_csv(
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Outputs/METIS/p2p-Gnutella08.metis.part.500",
+    **load_options
+)
+metis_cd_facebook = pd.read_csv(
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Outputs/METIS/facebook_combined.metis.part.500",
+    **load_options
+)
+metis_cd_youtube = pd.read_csv(
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Outputs/METIS/com-youtube.ungraph.metis.part.500",
+    **load_options
+)
+
+# metis_communities = [metis_cd_wiki,metis_cd_quantum,metis_cd_gnutella,metis_cd_facebook, metis_cd_youtube]
+metis_communities = ["/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Outputs/METIS/wiki-Vote.metis.part.500","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Outputs/METIS/ca-GrQc.metis.part.500","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Outputs/METIS/p2p-Gnutella08.metis.part.500","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Outputs/METIS/facebook_combined.metis.part.500","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Outputs/METIS/com-youtube.ungraph.metis.part.500"]
+
+```
+
+```{python}
+#mlrmcl
+mlrmcl_cd_wiki = pd.read_csv(
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Outputs/mlrmcl/wiki-Vote.c500.out",
+    **load_options
+)
+mlrmcl_cd_quantum = pd.read_csv(
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Outputs/mlrmcl/ca-GrQc.c500.out",
+    **load_options
+)
+mlrmcl_cd_gnutella = pd.read_csv(
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Outputs/mlrmcl/p2p-Gnutella08.c500.out",
+    **load_options
+)
+mlrmcl_cd_facebook = pd.read_csv(
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Outputs/mlrmcl/facebook_combined.c500.out",
+    **load_options
+)
+mlrmcl_cd_youtube = pd.read_csv(
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Outputs/mlrmcl/com-youtube.ungraph.metis.c500.out",
+    **load_options
+)
+# mlrmcl_communities = [mlrmcl_cd_wiki,mlrmcl_cd_quantum,mlrmcl_cd_gnutella,mlrmcl_cd_facebook, mlrmcl_cd_youtube]
+mlrmcl_communities = ["/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Outputs/mlrmcl/wiki-Vote.c500.out","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Outputs/mlrmcl/ca-GrQc.c500.out","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Outputs/mlrmcl/p2p-Gnutella08.c500.out","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Outputs/mlrmcl/facebook_combined.c500.out","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Outputs/mlrmcl/com-youtube.ungraph.metis.c500.out"]
+
+```
+
+```{python}
+load_options = {"sep": '\\t', "names":["Community"], "header":None, "skiprows": 6}
+
+#Clauset-Newman-Moore
+cnm_cd_wiki = pd.read_csv(
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Outputs/Clauset-Newman-Moore/wiki-Vote-CNM.txt",
+    **load_options
+)
+
+cnm_cd_quantum = pd.read_csv(
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Outputs/Clauset-Newman-Moore/ca-GrQc-CNM.txt",
+    **load_options
+)
+
+cnm_cd_quantum = cnm_cd_quantum[cnm_cd_quantum.index != 12295] #just remove the node from the analysis
+
+cnm_cd_gnutella = pd.read_csv(
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Outputs/Clauset-Newman-Moore/p2p-Gnutella08-CNM.txt",
+    **load_options
+)
+cnm_cd_facebook = pd.read_csv(
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Outputs/Clauset-Newman-Moore/facebook_combined-CNM.txt",
+    **load_options
+)
+cnm_cd_youtube = pd.read_csv(
+    "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Outputs/Clauset-Newman-Moore/youtube_CNM_20.txt",
+    **load_options
+)
+
+# cnm_communities = [cnm_cd_wiki,cnm_cd_quantum,cnm_cd_gnutella,cnm_cd_facebook, cnm_cd_youtube]
+
+cnm_communities = ["/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Outputs/Clauset-Newman-Moore/wiki-Vote-CNM.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Outputs/Clauset-Newman-Moore/ca-GrQc-CNM.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Outputs/Clauset-Newman-Moore/p2p-Gnutella08-CNM.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Outputs/Clauset-Newman-Moore/facebook_combined-CNM.txt","/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/Outputs/Clauset-Newman-Moore/youtube_CNM_20.txt"]
+
+```
+
+
+write a function that gives you the format to use the network X functions.
+
+```{python}
+#A list of frozensets of nodes, one for each community. Sorted by length with largest communities first.
+def convert_communities(G, communities):
+    """
+    Converts list output to A list of frozensets of nodes, one for each community. Sorted by length with largest communities first (i.e. the input that Networkx functions take)
+    Parameters
+    ----------
+    G : NetworkX Graph
+
+    communities : the Dataframe from containing the output from the community detection algo
+
+    method : an integer to indicate which community detection method results are being converted
+
+    Returns
+    -------
+    cres : list
+       A list of frozensets of nodes, one for each community. Sorted by length with largest communities first.
+    """
+    communities_temp = communities.copy()
+    cres = []
+    temp = communities.value_counts()
+    
+    communities_temp['Node_id'] = G.nodes #for the output fromt the gpmetis | mlrmcl
+    # if method == 1:
+    #     communities_temp['Node_id'] = G.nodes #for the output fromt the gpmetis | mlrmcl
+    # else: 
+    #     communities_temp['Node_id'] = communities.index.values #for the CNM
+
+    for com in np.concatenate(np.array(temp.index.values)):
+        com_temp = [communities_temp[communities_temp['Community'] == com]['Node_id'].values]
+        fnum = frozenset(set(com_temp[0]))
+        cres.append(fnum)
+    return cres
+
+```
+
+
+```{python}
+
+def convert_communities_v2(G, communities):
+    """
+    Converts list output to A list of frozensets of nodes, one for each community. Sorted by length with largest communities first (i.e. the input that Networkx functions take)
+    Parameters
+    ----------
+    G : text file
+
+    communities : text file
+
+    Returns
+    -------
+    cres : list
+       A list of frozensets of nodes, one for each community. Sorted by length with largest communities first.
+    """
+    directed = False 
+    dic = {}
+    id_map = {} 
+    node_num = 4039
+    edge_num = 88234
+
+    in_file = open(G, "rt")
+
+    for line in in_file:
+        if("#" in line):
+            if("Nodes" in line):
+                str_split = line.strip().split()
+                node_num = int(str_split[2])
+                edge_num = int(str_split[4])
+                print(node_num, edge_num)
+            continue
+        str_split = [int(ele) for ele in line.strip().split()]
+        if(str_split[0] == str_split[1]):
+            continue
+        if(str_split[0] in dic):
+            dic[str_split[0]].append(str_split[1])
+        else:
+            dic[str_split[0]] = []
+            dic[str_split[0]].append(str_split[1])
+        if(directed == False):
+            if(str_split[1] in dic):
+                dic[str_split[1]].append(str_split[0])
+            else:
+                dic[str_split[1]] = []
+                dic[str_split[1]].append(str_split[0])
+
+    count = 1 
+    key_set = [ele for ele in dic]
+    for ele in key_set:
+        id_map[ele] = count
+        count += 1
+
+    cres = []
+
+    communityDict=defaultdict(set) # creates a dict of keys as community number and values as set of nodeIDs belonging to that community
+    communityFile = open(communities, "rt") # the output file obtained from community detection algorithm is given in argv[2]
+
+    outcount=1
+    # finds the nodeID for the metics file by looping through the mapping dictionary of the metis file
+    for ele in communityFile:
+        for node, counts in id_map.items():
+            if(outcount==counts):
+                communityDict[ele].add(node)
+        outcount+= 1
+
+    for key, value in communityDict.items():
+        cres.append(frozenset(value))
+
+        return cres
+
+
+# G = "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/facebook_combined.txt"
+
+# communities = "/Users/macbook/Desktop/Network-Science/Lab2-5245/CSE5245ForStudents/data/METIS/facebook_combined.metis.part.500"
+
+# testing  = convert_communities_v2(G, communities)
+```
+
+```{python}
+
+# convert_communities(G5, metis_cd_youtube)
+
+#get modularity of the graphs
+comms1 = list(map(convert_communities_v2, graphs, metis_communities))
+comms2 =list(map(convert_communities_v2, graphs, mlrmcl_communities))
+comms3 =list(map(convert_communities_v2, graphs_wp, cnm_communities))
+
+# comms3 = [convert_communities(g, c, method = 2) for g in graphs for c in cnm_communities]
+
+mod_res1 = list(map(nx_comm.modularity, graphs, comms1))
+mod_res2 = list(map(nx_comm.modularity, graphs, comms2))
+mod_res3 = list(map(nx_comm.modularity, graphs_wp, comms3))
+```
+
+```{python}
+# Split the DataFrame into four columns, taking 5 elements at a time
+df1 = pd.DataFrame(mod_res1, columns=['gpmetis'])
+df2 = pd.DataFrame(mod_res2, columns=['mlrmcl'])
+df3 = pd.DataFrame(mod_res3, columns=['cnm'])
+
+# Concatenate the four columns into a new DataFrame
+result = pd.concat([df1, df2, df3], axis=1)
+
+# Rename the columns as desired
+result.index = ['Wikipedia', 'Physics', 'Gnutella', 'Facebook', 'Youtube']
+print(result.round(3))
+
+ax = result.plot.bar(rot = 0, figsize =(13, 9), title = 'modularity scores for each network and community detection algo',fontsize = 15,edgecolor ='black')
+```
+
+```{python}
+
+def conductance_scores(g, c, plot = True):
+    c =  convert_communities(g,c)
+    #how to get the conductance for all the communities
+    conductance_scores_temp = [nx.conductance(g,communities_i, weight='weight') for communities_i in c]
+    if plot == True:
+        pd.Series(conductance_scores_temp).plot.hist(grid=True, bins=20, color='deepskyblue')
+        plt.title('Conductance scores for each community')
+        plt.xlabel('Conductance')
+        plt.ylabel('Counts')
+        plt.style.use('ggplot')
+        plt.grid(axis='y', alpha=0.75)
+        plt.show()
+    return conductance_scores_temp
+
+n_bins = 20
+
+dist1 = conductance_scores(G1, metis_cd_wiki)
+dist2 = conductance_scores(G2, metis_cd_quantum)
+dist3 = conductance_scores(G3, metis_cd_gnutella)
+dist4 = conductance_scores(G4, metis_cd_facebook)
+# dist13 = conductance_scores(G5, metis_cd_youtube)
+
+dist5 = conductance_scores(G1, mlrmcl_cd_wiki)
+dist6 = conductance_scores(G2, mlrmcl_cd_quantum)
+dist7 = conductance_scores(G3, mlrmcl_cd_gnutella)
+dist8 = conductance_scores(G4, mlrmcl_cd_facebook)
+# dist14 = conductance_scores(G5, mlrmcl_cd_youtube)
+
+dist9 = conductance_scores(G1, cnm_cd_wiki)
+dist10 = conductance_scores(G2, cnm_cd_quantum)
+dist11 = conductance_scores(G3, cnm_cd_gnutella)
+dist12 = conductance_scores(G4, cnm_cd_facebook)
+# dist15 = conductance_scores(G5_pruned, cnm_cd_youtube)
+
+cols = ['gpmetis', 'mlrmcl', 'cnm']
+rows =  ['Wikipedia', 'Physics', 'Gnutella', 'Facebook', 'YouTube']
+# fig, axs = plt.subplots(2, 2, tight_layout=True)
+fig, axs = plt.subplots(4, 3, tight_layout=True)
+
+for ax, col in zip(axs[0], cols):
+    ax.set_title(col)
+
+for ax, row in zip(axs[:,0], rows):
+    ax.set_ylabel(row, rotation=0, size='large')
+
+axs[0,0].hist(dist1, bins=n_bins, color='gold')
+axs[0,0].axvline(np.median(dist1), color='k', linestyle='dashed', linewidth=1)
+
+axs[0,1].hist(dist5, bins=n_bins, color='gold')
+axs[0,1].axvline(np.median(dist5), color='k', linestyle='dashed', linewidth=1)
+
+axs[0,2].hist(dist9, bins=n_bins, color='gold')
+axs[0,2].axvline(np.median(dist9), color='k', linestyle='dashed', linewidth=1)
+
+axs[1,0].hist(dist2, bins=n_bins, color='violet')
+axs[1,0].axvline(np.median(dist2), color='k', linestyle='dashed', linewidth=1)
+
+axs[1,1].hist(dist6, bins=n_bins, color='violet')
+axs[1,1].axvline(np.median(dist6), color='k', linestyle='dashed', linewidth=1)
+
+axs[1,2].hist(dist10, bins=n_bins, color='violet')
+axs[1,2].axvline(np.median(dist10), color='k', linestyle='dashed', linewidth=1)
+
+axs[2,0].hist(dist3, bins=n_bins, color='limegreen')
+axs[2,0].axvline(np.median(dist3), color='k', linestyle='dashed', linewidth=1)
+
+axs[2,1].hist(dist7, bins=n_bins, color='limegreen')
+axs[2,1].axvline(np.median(dist7), color='k', linestyle='dashed', linewidth=1)
+
+axs[2,2].hist(dist11, bins=n_bins, color='limegreen')
+axs[2,2].axvline(np.median(dist11), color='k', linestyle='dashed', linewidth=1)
+
+axs[3,0].hist(dist4, bins=n_bins, color='darkorange')
+axs[3,0].axvline(np.median(dist4), color='k', linestyle='dashed', linewidth=1)
+
+axs[3,1].hist(dist8, bins=n_bins, color='darkorange')
+axs[3,1].axvline(np.median(dist8), color='k', linestyle='dashed', linewidth=1)
+
+axs[3,2].hist(dist12, bins=n_bins, color='blue')
+axs[3,2].axvline(np.median(dist12), color='k', linestyle='dashed', linewidth=1)
+#np.mean(conductance_scores)
+```
+
+```{python}
+def ncs_scores(g, c, plot = False):
+    c =  convert_communities(g,c)
+    #how to get the conductance for all the communities
+    ncs_scores_temp = [nx.normalized_cut_size(g,communities_i, weight='weight') for communities_i in c]
+    if plot == True:
+        pd.Series(ncs_scores_temp).plot.hist(grid=True, bins=20, color='deepskyblue')
+        plt.title('Normalized cut scores for each community')
+        plt.xlabel('Normalized cut')
+        plt.ylabel('Counts')
+        plt.style.use('ggplot')
+        plt.grid(axis='y', alpha=0.75)
+        plt.show()
+    return ncs_scores_temp
+
+dist1 = ncs_scores(G1, metis_cd_wiki)
+dist2 = ncs_scores(G2, metis_cd_quantum)
+dist3 = ncs_scores(G3, metis_cd_gnutella)
+dist4 = ncs_scores(G4, metis_cd_facebook)
+
+dist5 = ncs_scores(G1, mlrmcl_cd_wiki)
+dist6 = ncs_scores(G2, mlrmcl_cd_quantum)
+dist7 = ncs_scores(G3, mlrmcl_cd_gnutella)
+dist8 = ncs_scores(G4, mlrmcl_cd_facebook)
+
+dist9 = ncs_scores(G1, cnm_cd_wiki)
+dist10 = ncs_scores(G2, cnm_cd_quantum)
+dist11 = ncs_scores(G3, cnm_cd_gnutella)
+dist12 = ncs_scores(G4, cnm_cd_facebook)
+
+cols = ['gpmetis', 'mlrmcl', 'cnm']
+rows =  ['Wikipedia', 'Physics', 'Gnutella', 'Facebook']
+# fig, axs = plt.subplots(2, 2, tight_layout=True)
+fig, axs = plt.subplots(4, 3, tight_layout=True)
+
+for ax, col in zip(axs[0], cols):
+    ax.set_title(col)
+
+for ax, row in zip(axs[:,0], rows):
+    ax.set_ylabel(row, rotation=0, size='large')
+
+axs[0,0].hist(dist1, bins=n_bins, color='gold')
+axs[0,0].axvline(np.median(dist1), color='k', linestyle='dashed', linewidth=1)
+# axs[0,0].set_title('Wikipedia metis')
+
+axs[0,1].hist(dist5, bins=n_bins, color='gold')
+axs[0,1].axvline(np.median(dist5), color='k', linestyle='dashed', linewidth=1)
+# axs[0,1].set_title('Wikipedia mlrmcl')
+
+axs[0,2].hist(dist9, bins=n_bins, color='gold')
+axs[0,2].axvline(np.median(dist9), color='k', linestyle='dashed', linewidth=1)
+# axs[0,2].set_title('Wikipedia cnm')
+
+axs[1,0].hist(dist2, bins=n_bins, color='violet')
+axs[1,0].axvline(np.median(dist2), color='k', linestyle='dashed', linewidth=1)
+# axs[1,0].set_title('Physics metis')
+
+axs[1,1].hist(dist6, bins=n_bins, color='violet')
+axs[1,1].axvline(np.median(dist6), color='k', linestyle='dashed', linewidth=1)
+# axs[1,1].set_title('Physics mlrmcl')
+
+axs[1,2].hist(dist10, bins=n_bins, color='violet')
+axs[1,2].axvline(np.median(dist10), color='k', linestyle='dashed', linewidth=1)
+# axs[1,2].set_title('Physics cnm')
+
+axs[2,0].hist(dist3, bins=n_bins, color='limegreen')
+axs[2,0].axvline(np.median(dist3), color='k', linestyle='dashed', linewidth=1)
+# axs[2,0].set_title('Gnutella metis')
+
+axs[2,1].hist(dist7, bins=n_bins, color='limegreen')
+axs[2,1].axvline(np.median(dist7), color='k', linestyle='dashed', linewidth=1)
+# axs[2,1].set_title('Gnutella mlrmcl')
+
+axs[2,2].hist(dist11, bins=n_bins, color='limegreen')
+axs[2,2].axvline(np.median(dist11), color='k', linestyle='dashed', linewidth=1)
+# axs[2,2].set_title('Gnutella cnm')
+
+axs[3,0].hist(dist4, bins=n_bins, color='darkorange')
+axs[3,0].axvline(np.median(dist4), color='k', linestyle='dashed', linewidth=1)
+# axs[3,0].set_title('Facebook metis')
+
+axs[3,1].hist(dist8, bins=n_bins, color='darkorange')
+axs[3,1].axvline(np.median(dist8), color='k', linestyle='dashed', linewidth=1)
+# axs[3,1].set_title('Facebook mlrmcl')
+
+axs[3,2].hist(dist12, bins=n_bins, color='darkorange')
+axs[3,2].axvline(np.median(dist12), color='k', linestyle='dashed', linewidth=1)
+# axs[3,2].set_title('Facebook cnm')
+
+# ncs_scores(G1, metis_cd_wiki)
+```
+
+### ground truth
+
+```{python}
+#load ground truth
+
+#normalized_mutual_info_score([0, 0, 1, 1], [0, 0, 1, 1])
+
+```
